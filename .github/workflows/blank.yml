@@ -18,6 +18,7 @@ jobs:
         run: |
           TAG_NAME=$(basename $GITHUB_REF)
           echo "Tag $TAG_NAME is blocked until reviewer approval."
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
       - name: Create a Pull Request for Approval
         id: create_pr
