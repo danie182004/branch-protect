@@ -1,0 +1,35 @@
+name: Block Release/Tag Creation
+
+on:
+  create:
+    tags:
+      - "*"
+    branches:
+      - "refs/tags/*"
+  release:
+    types: [created]
+
+jobs:
+  block-release-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block Release/Tag Creation
+        run: |
+          echo "Blocking release/tag creation"
+          exit 1
+
+  manual-approval:
+    runs-on: ubuntu-latest
+    needs: block-release-tag
+    steps:
+      - name: Request Approval
+        run: echo "Manual approval required to proceed with release/tag creation"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Wait for Approval
+        uses: peter-evans/wait-for-approval@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          approvers: 'danie182004'
+          issue: 'true'
+          repository: ${{ github.repository }}
