@@ -1,0 +1,23 @@
+name: Approval Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  approval-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Wait for approval
+      id: approval
+      uses: harrystevens/action-required-approvals@v1.0.1
+      with:
+        reviewers: 'danie182004'
+
+    - name: Set approval status
+      if: steps.approval.outputs.approved == 'true'
+      run: echo "Approved by reviewer"
