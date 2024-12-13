@@ -1,0 +1,16 @@
+name: Block Tag Creation Without Approval
+
+on:
+  create:
+    tags:
+      - '*'
+
+jobs:
+  block-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Block Tag Creation
+        run: |
+          echo "Blocking tag creation until pull request is approved"
+          exit 1
