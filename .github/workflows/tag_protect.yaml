@@ -1,0 +1,24 @@
+name: Tag Approval Workflow
+
+on:
+  push:
+    tags:
+      - 'v*'  # This triggers the workflow on new tags that start with 'v'
+
+jobs:
+  approval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request approval
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: { id } } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Approval required for new release tag',
+              head: context.sha,
+              base: 'v1',  // Replace with your protected branch
+              body: 'Please review and approve this release tag.'
+            });
+            console.log(`Created pull request #${id}`);
